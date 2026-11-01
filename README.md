@@ -16,7 +16,11 @@ The aim of this robotic implementation is to test whether the same mechanism sur
 
 *Overview of the learning walks recorded during the experiments.*
 
+![Additional experimental results](media/Epiv.jpg)
+
 The robot autonomously selects when to explore, perform pirouettes, acquire visual memories and return towards the nest. Across successive walks, exploration gives way to longer, straighter trajectories as the visual compass becomes more reliable. The acquired memories also support subsequent visual homing.
+
+The experimental data (CSV files) are publicly available in this repository.
 
 ## Robotic platforms
 
@@ -24,7 +28,7 @@ The robot autonomously selects when to explore, perform pirouettes, acquire visu
 
 *Outdoor experiments near the Library Square, University of Sussex. Three white cylinders reproduce a scaled-up version of the landmark arrangement used in desert-ant learning-walk experiments.*
 
-![Earlier mecanum-wheel robotic platform](media/mecanum_robot.png)
+![Earlier mecanum-wheel robotic platform](media/mecanum_robot.jpg)
 
 *Earlier robot platform with mecanum wheels, used during development.*
 
@@ -61,10 +65,15 @@ The large ground robots are experimental platforms, not a requirement of the mus
 
 The next step is to transfer this error-driven model of **active visual learning** to flying robots, to investigate the learning flights (LFs) of **bees and wasps**. As with ant learning walks, the aim is not only to demonstrate that memories acquired near the nest can later support homing, but to explain **when and where the animal acquires those memories, how its exploratory trajectory is controlled, and how learning gives way to foraging**.
 
-Recent results show that insect-inspired visual homing can operate over much longer distances than those tested here. In [Ou et al. (2026)](https://doi.org/10.1038/s41586-026-10461-3), the *Bee-Nav* quadcopter combined path integration with a compact visual homing network, achieving homing to within **0.5 m** on **100% of 30–110 m flights** and **70% of 200–600 m flights** in the reported experiments. The visual networks occupied only **3.4 kB** or **42.3 kB** of memory and ran on a Raspberry Pi 4. **The paper does not specify the complete drone mass or a measured flight-energy consumption (J/Wh); network memory size is not an energy measurement.**
+Recent results show that insect-inspired visual homing can operate over much longer distances than those tested here. In [Ou et al. (2026)](https://doi.org/10.1038/s41586-026-10461-3), the *Bee-Nav* quadcopter combined path integration with a compact visual homing network, achieving homing to within **0.5 m** on **100% of 30–110 m flights** and **70% of 200–600 m flights** in the reported experiments. The visual networks occupied only **3.4 kB** or **42.3 kB** of memory and ran on a Raspberry Pi 4.
 
-Importantly, although its learning flights were executed autonomously, *Bee-Nav* used a **predefined, algorithmically generated “wasp-like” trajectory** to collect visual memories. The authors explicitly state that they did not reproduce the varying learning-flight trajectories of real honeybees. Thus, their work demonstrates efficient acquisition and use of visual memories for homing, but **not a biologically motivated online mechanism controlling the structure and progression of learning flights**. Modelling that behavioural control—and testing whether the PI–visual-compass mismatch can drive it in flying robots—is the next research objective.
+Importantly, although its learning flights were executed autonomously, *Bee-Nav* used a **predefined, algorithmically generated “wasp-like” trajectory** to collect visual memories. The authors explicitly state that they did not reproduce the varying learning-flight trajectories of real honeybees. Thus, their work demonstrates efficient acquisition and use of visual memories for homing, but **not a biologically motivated online mechanism controlling the structure and progression of learning flights**.
 
 ---
 
 **Author:** Thomas Misiek · University of Sussex, UK
+
+
+![Robotic platform](media/robot.jpg)
+
+![Earlier mecanum-wheel robotic platform](media/mecanum_robot.jpg)
