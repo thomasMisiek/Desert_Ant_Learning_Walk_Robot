@@ -6,53 +6,23 @@ The model proposes that a single error signal—the **angular mismatch between t
 
 Figure 1 illustrates this error signal: PI and the visual compass provide separate predictions of the nest direction, and their angular disagreement regulates learning-walk behaviour.
 
-<img src="media/Epiv.jpg" alt="Diagram of the angular mismatch between the visual and path-integration predictions" width="500">
+<p align="center"><img src="media/Epiv.jpg" alt="Angular mismatch between path-integration and visual-compass nest-direction predictions" width="460"></p>
 
 *Figure 1. Angular mismatch between the nest directions predicted by path integration and the visual compass.*
 
 The aim of this robotic implementation is to test whether the same mechanism survives the **reality gap**: real sensors, uneven terrain, wheel slippage, changing illumination and imperfect panoramic images. The associated manuscript is *Emergent Control of Ant Learning Walks in a Mobile Robot* (Misiek, Philippides, Graham and Knight, 2026; arXiv submission).
 
-## Experimental results
+## Robotic implementation
 
-The robot autonomously selects when to explore, perform pirouettes, acquire visual memories and return towards the nest. Across successive walks, exploration gives way to longer, straighter trajectories as the visual compass becomes more reliable. The acquired memories also support subsequent visual homing.
+### Experimental arena
 
-Figure 2 shows representative learning walks recorded during outdoor experiments, including the robot's exploratory trajectories around the nest and the experimental landmarks.
+Outdoor experiments were conducted near the Library Square at the University of Sussex. As shown in Figure 2, three white cylinders reproduce a scaled-up version of the landmark arrangement used in desert-ant learning-walk experiments.
 
-<img src="media/example_LWs.png" alt="Examples of robotic learning-walk trajectories" width="470">
+<p align="center"><img src="media/robot_library.jpg" alt="Outdoor robot and three landmark cylinders at the University of Sussex" width="570"></p>
 
-*Figure 2. Examples of learning-walk trajectories recorded during outdoor experiments.*
+*Figure 2. Outdoor experimental arena near the Library Square, University of Sussex, with three white cylindrical landmarks.*
 
-The complete set of recorded trajectories is shown in Figure 3, with learning walks and subsequent visual homing tests presented separately.
-
-<img src="media/all_LWs.png" alt="Recorded learning walks and zero-vector visual homing tests" width="500">
-
-*Figure 3. Overview of the outdoor experiments: (A) learning-walk trajectories and (B) zero-vector visual homing tests.*
-
-The experimental data (CSV files) are publicly available in this repository.
-
-## Robotic platforms
-
-Outdoor experiments were conducted near the Library Square at the University of Sussex. As shown in Figure 4, three white cylinders reproduce a scaled-up version of the landmark arrangement used in desert-ant learning-walk experiments.
-
-<img src="media/robot_library.jpg" alt="Robot and landmark cylinders at the University of Sussex" width="620">
-
-*Figure 4. Outdoor experimental arena near the Library Square, University of Sussex, with three white cylindrical landmarks.*
-
-Both platforms are much larger than an ant, **not because the neural model requires a large robot**, but to accommodate the requirements of extended outdoor experiments: sufficient battery capacity to operate for several hours, onboard computing and sensors, and GNSS equipment for accurate trajectory recording. Large wheels also allow the robot to travel over grass and uneven terrain.
-
-The outdoor differential-drive robot used for the learning-walk experiments (Figure 5) weighs approximately **15 kg** and has **27 cm wheels**. Its high-level navigation and visual processing run on an **NVIDIA Jetson TX1**, with an **Arduino** handling low-level sensor acquisition and **RoboClaw** motor controllers driving the wheels. A panoramic camera provides visual input; inertial heading and wheel-encoder displacement are integrated to maintain a home vector. **RTK-GNSS (GPS) provides ground-truth positions for recording and analysis; it does not supply the robot's visual homing direction.**
-
-<img src="media/robot.jpg" alt="Differential-drive robot used in outdoor experiments" width="500">
-
-*Figure 5. Custom-built differential-drive robot used in the outdoor learning-walk experiments, with large wheels and a panoramic camera.*
-
-An earlier platform, shown in Figure 6, used mecanum wheels during development.
-
-<img src="media/mecanum_robot.jpg" alt="Earlier mecanum-wheel robotic platform" width="500">
-
-*Figure 6. Earlier robot platform with mecanum wheels, used during development.*
-
-## Navigation architecture
+### Navigation architecture
 
 The model combines three interacting components:
 
@@ -60,21 +30,62 @@ The model combines three interacting components:
 2. **Visual compass (VC):** uses panoramic views and mushroom-body-inspired visual memories to predict the nestward direction.
 3. **Learning-walk controller:** uses the angular mismatch between PI and VC predictions to regulate exploration, pirouettes, visual learning and the transition towards foraging.
 
-The organisation of the robot's navigation and control system is shown in Figure 7.
+Figure 3 shows how these navigation components interact with the robot's sensors, motor control and recording systems.
 
-<img src="media/robot_diagram.png" alt="Robot navigation and control architecture" width="650">
+<p align="center"><img src="media/robot_diagram.png" alt="Navigation, sensing, motor control and recording architecture" width="620"></p>
 
-*Figure 7. Overview of the robot's navigation and control architecture.*
+*Figure 3. Architecture of the robot's navigation and control system.*
 
-The visual compass learns from images acquired by the panoramic camera. Figure 8 compares raw fisheye images with their unwrapped panoramic representations. The two views were acquired at different positions and times, illustrating changes in the relative positions of nearby landmarks and in the visual appearance of the scene.
+### Robotic platforms
 
-<img src="media/panoramic_views.png" alt="Fisheye camera images and unwrapped panoramic views" width="680">
+The software was implemented on two robotic platforms (Figure 4): a differential-drive robot used for the outdoor learning-walk experiments and an earlier, smaller platform with mecanum wheels.
 
-*Figure 8. Raw fisheye views (A, C) and corresponding unwrapped panoramas (B, D) acquired by the robot.*
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="media/robot.jpg" alt="15 kg four-wheeled differential-drive outdoor robot" width="330"><br>
+      <sub><b>A.</b> 15 kg differential-drive robot used in the outdoor experiments.</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="media/mecanum_robot.jpg" alt="Earlier 1 kg robot with mecanum wheels" width="330"><br>
+      <sub><b>B.</b> Earlier 1 kg platform with mecanum wheels.</sub>
+    </td>
+  </tr>
+</table>
 
-### Model size versus robot size
+*Figure 4. The two robotic platforms on which the software was implemented.*
 
-The large ground robots are experimental platforms, not a requirement of the mushroom-body-inspired visual-memory architecture. Related visual-memory models have also been demonstrated with micro-aerial vehicles. For example, [Gattaux et al. (2026), *Antflie: Frugal Visual Teach and Repeat on Narrow FoV Micro-Drones*](https://doi.org/10.1109/LRA.2026.3667486), use a related mushroom-body-inspired approach with a **33 g Crazyflie 2.1-based drone**. Their neural network was evaluated using offboard computation; their navigation task and controller are distinct from the PI–VC mismatch-driven learning-walk model implemented here.
+The two robots weigh approximately **15 kg** and **1 kg**, respectively. They were built for practical experimental requirements, including movement over uneven terrain, **more than four hours of autonomy**, and space for onboard computing, sensors and recording devices such as **GNSS (GPS)**. Large wheels allow the outdoor robot to travel across grass and uneven ground.
+
+The outdoor differential-drive robot has **27 cm wheels**. Its high-level navigation and visual processing run on an **NVIDIA Jetson TX1**, with an **Arduino** handling low-level sensor acquisition and **RoboClaw** motor controllers driving the wheels. A panoramic camera provides visual input; inertial heading and wheel-encoder displacement are integrated to maintain a home vector. **RTK-GNSS (GPS) provides ground-truth positions for recording and analysis; it does not supply the robot's visual homing direction.**
+
+The **navigation algorithms themselves can run on much smaller robots**. For example, [Gattaux et al. (2026), *Antflie: Frugal Visual Teach and Repeat on Narrow FoV Micro-Drones*](https://doi.org/10.1109/LRA.2026.3667486) demonstrated a closely related **mushroom-body-inspired visual-memory navigation model** on a **33 g Crazyflie 2.1-based drone**, with the neural-network computation performed offboard during the experiments. A complete **onboard visual-navigation and path-integration pipeline** has also been demonstrated on a small quadcopter by [Ou et al. (2026)](https://doi.org/10.1038/s41586-026-10461-3). These are distinct navigation systems; neither implements the PI–VC mismatch controller for ant learning walks used here.
+
+### Panoramic vision
+
+The visual compass learns from images acquired by the robot's panoramic camera. Figure 5 compares raw fisheye images with their unwrapped panoramic representations. The views were acquired at different positions and times, illustrating shifts in nearby landmarks and changes in the appearance of the scene.
+
+<p align="center"><img src="media/panoramic_views.png" alt="Raw fisheye views and unwrapped panoramic images" width="650"></p>
+
+*Figure 5. Raw fisheye images (A, C) and their corresponding unwrapped panoramic views (B, D), acquired at different positions and times.*
+
+## Experimental results
+
+The robot autonomously selects when to explore, perform pirouettes, acquire visual memories and return towards the nest. Across successive walks, exploration gives way to longer, straighter trajectories as the visual compass becomes more reliable. The acquired memories also support subsequent visual homing.
+
+Figure 6 shows representative trajectories recorded during the outdoor experiments, including exploratory paths around the nest and the artificial landmarks.
+
+<p align="center"><img src="media/example_LWs.png" alt="Examples of robotic learning walks" width="440"></p>
+
+*Figure 6. Examples of learning-walk trajectories recorded during outdoor experiments.*
+
+Figure 7 gives an overview of the recorded learning walks and the subsequent **zero-vector visual homing tests**, plotted separately over the experimental site.
+
+<p align="center"><img src="media/all_LWs.png" alt="Overview of learning walks and zero-vector visual homing tests" width="470"></p>
+
+*Figure 7. Outdoor trajectories: (A) learning walks and (B) zero-vector visual homing tests.*
+
+The experimental data (CSV files) are **publicly available in the [`data/`](data/) directory** of this repository.
 
 ## Related research
 
