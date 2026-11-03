@@ -1,6 +1,6 @@
 # Emergent Control of Ant Learning Walks in a Mobile Robot
 
-This repository contains the robotic implementation of an insect-inspired model of desert ant **learning walks (LWs)**. Before starting to forage, naive ants explore the surroundings of their nest through short, spiralling walks, interspersed with **pirouettes** during which they scan and learn the visual panorama. Successive walks become longer and straighter as the ants acquire visual memories.
+This repository contains the robotic implementation of an insect-inspired model of desert ant **learning walks (LWs)**.  **Read the published paper: [Emergent Control of Ant Learning Walks in a Mobile Robot (Misiek et al., 2026) — arXiv:2611.00392](https://arxiv.org/abs/2611.00392)** Before starting to forage, naive ants explore the surroundings of their nest through short, spiralling walks, interspersed with **pirouettes** during which they scan and learn the visual panorama. Successive walks become longer and straighter as the ants acquire visual memories.
 
 The model proposes that a single error signal—the **angular mismatch between the nest direction estimated by path integration (PI) and the direction predicted by a visual compass (VC)**—controls the balance between exploration and exploitation. Large errors promote slow movement, frequent scans and early returns to the nest. As visual memories accumulate, the mismatch decreases, allowing longer, straighter walks and, eventually, foraging-like behaviour.
 
